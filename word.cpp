@@ -88,13 +88,6 @@ public:
                 options.push_back(currentVP.english); // 将正确答案加入选项
                 answer = currentVP.english;
                 // Generate three wrong options // 生成三个错误选项
-                while (options.size() < 4) {
-                    int wrongIndex = dis(gen); // 随机选择一个索引
-                    if (wrongIndex != index&&
-                    find(options.begin(), options.end(), vocabList[wrongIndex].english)==options.end()) { // 确保不是正确答案
-                        options.push_back(vocabList[wrongIndex].english); // 加入错误选项
-                    }
-                }
             }else{
                 options.push_back(currentVP.chinese); // 将正确答案加入选项
                 answer = currentVP.chinese;
@@ -111,10 +104,7 @@ public:
 
             shuffle(options.begin(), options.end(), gen); // 打乱选项顺序
             if(flag==-1){
-                cout << "What is the English translation of \"" << currentVP.chinese << "\"?" << endl; // 提示用户翻译
-                for (int j = 0; j < 4; ++j) {
-                    cout << j + 1 << ". " << options[j] << endl; // 显示选项
-                }
+                cout << "inputing the English translation of \"" << currentVP.chinese << "\"?" << endl; // 提示用户翻译
             }else{
                 cout << "What is the Chinese translation of \"" << currentVP.english << "\"?" << endl; // 提示用户翻译
                 for (int j = 0; j < 4; ++j) {
@@ -123,9 +113,20 @@ public:
 
             }
 
-            int userAnswer;
-            cin >> userAnswer; // 获取用户输入的答案
-            if (userAnswer >= 1 && userAnswer <= 4&&options[userAnswer-1]==answer) { // 检查答案是否正确
+            string userAnswer;
+            if (flag==-1)
+            {
+                getline(cin,userAnswer);
+            }else{
+                int intAnswer;
+                cin >> intAnswer; // 获取用户输入的答案
+                if (intAnswer>=1&&intAnswer<=4)
+                {
+                    userAnswer = options[intAnswer-1];
+                }
+                
+            }
+            if (userAnswer==answer) { // 检查答案是否正确
                 cout << BLUE<<"Correct!" <<RESET<< endl; // 正确提示
                 vocabList[index].count++; // 更新正确回答次数
             } else {
