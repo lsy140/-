@@ -6,6 +6,7 @@
 #include <algorithm> // 包含算法库
 #include <random>   // 包含随机数生成库
 #include <ctime>    // 包含时间库
+#include <limits>
 
 #define RED     "\033[31m"
 #define RESET   "\033[0m"    // 重置所有属性
@@ -13,7 +14,7 @@
 
 using namespace std; // 使用标准命名空间
 
-string filename = "/mnt/d/桌面/vocab_data.csv"; // 文件名，用于持久化存储
+string filename = "/mnt/d/桌面/test.csv"; // 文件名，用于持久化存储
 
 struct VocabPair {
     string chinese; // 中文单词
@@ -116,6 +117,7 @@ public:
             string userAnswer;
             if (flag==-1)
             {
+                cin.ignore();
                 getline(cin,userAnswer);
             }else{
                 int intAnswer;
@@ -123,8 +125,13 @@ public:
                 if (intAnswer>=1&&intAnswer<=4)
                 {
                     userAnswer = options[intAnswer-1];
+                }else {
+                    cin.clear(); // 清除输入错误状态
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // 清空缓冲区
+                    cout << "Invalid input." << endl;
+                    continue;
                 }
-                
+                    
             }
             if (userAnswer==answer) { // 检查答案是否正确
                 cout << BLUE<<"Correct!" <<RESET<< endl; // 正确提示
@@ -152,16 +159,20 @@ public:
             if (command == "1") { // 添加新词汇对命令
                 string chinese, english;
                 cout << "Enter Chinese word: ";
-                // cin.ignore(); // 忽略换行符
-                // getline(cin, chinese); // 获取中文单词
-                cin>>chinese;
+                cin.ignore(); // 忽略换行符
+                getline(cin, chinese); // 获取中文单词
+                // cin>>chinese;
                 cout << "Enter English word: ";
-                // getline(cin, english); // 获取英文单词
-                cin>>english;
+                cin.ignore();
+                getline(cin, english); // 获取英文单词
+                // cin>>english;
                 addVocabulary(chinese, english); // 添加词汇对
             } else if (command == "2") { // 开始学习模式命令
+                // cin.ignore();
                 learningMode();
+                
             } else if (command == "q") { // 退出程序命令
+                // cin.ignore();
                 saveVocabulary(); // 保存当前进度
                 break;
             } else {
